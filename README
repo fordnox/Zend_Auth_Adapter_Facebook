@@ -1,0 +1,69 @@
+Zend_Auth_Adapter_Facebook
+================
+
+This repository contains the open source Facebook oAuth2 adapter for Zend Framework that allows you to utilize the
+above on your website.
+
+Author
+-----
+
+Author of this software is Andrius Putna <fordnox@gmail.com>
+Released under Zend Framework license
+
+Usage
+-----
+
+The [examples][examples] are a good place to start. The minimal you'll need to
+have is:
+
+..application/configs/application.ini
+
+; ------------------------------------------
+; Facebook
+; ------------------------------------------
+facebook.appId = "<Facebook appId>"
+facebook.secret = "<Facebook secret>"
+facebook.permissions = "<List of permissions to request>"
+
+
+..application/controller/AuthController.php
+
+<?php
+
+class AuthController extends Zend_Controller_Action
+{
+
+    public function indexAction()
+    {
+        $auth    = Zend_Auth::getInstance();
+        if ($auth->hasIdentity()) {
+            $this->_helper->redirector('index', 'profile');
+        }
+
+        $bootstrap = $this->getInvokeArg('bootstrap');
+        $array = $bootstrap->getOption('facebook');
+        $adapter = new Zend_Auth_Adapter_Facebook($array);
+        $token = $this->_getParam('code');
+
+        if($token) {
+            $adapter->setToken($token);
+            $result  = $auth->authenticate($adapter);
+            if ($result->isValid()) {
+                $access_token = $auth->getIdentity();
+                // do your stuff with access token
+            } else {
+                print $result->getMessages();
+            }
+        } else {
+            $adapter->redirect();
+        }
+    }
+}
+
+Feedback
+--------
+
+We are relying on the [GitHub issues tracker][issues] linked from above for
+feedback. File bugs or other issues [here][issues].
+
+[issues]: http://github.com/fordnox/Zend_Auth_Adapter_Facebook/issues
