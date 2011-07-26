@@ -201,7 +201,9 @@ class Zend_Auth_Adapter_Facebook implements Zend_Auth_Adapter_Interface
         return $protocol . $parts['host'] . $port . $parts['path'] . $query;
     }
     
-    //Checks to see if _redirect_uri is set, if not return current URL
+    /**
+    *Checks to see if _redirect_uri is set, if not return current URL
+    */
     protected function getRedirectUri()
     {
     	if($this->_redirect_uri != null)
@@ -210,7 +212,9 @@ class Zend_Auth_Adapter_Facebook implements Zend_Auth_Adapter_Interface
     		return $this->getCurrentUrl();
     }
     
-    //Public function to allow users to set _redirect_uri after constructing the adapter
+    /**
+    *Public function to allow users to set _redirect_uri after constructing the adapter
+    */
     public function setRedirectUri($redirect_uri)
     {
     	$this->_redirect_uri = $redirect_uri;
