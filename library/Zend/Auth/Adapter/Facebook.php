@@ -32,6 +32,7 @@ class Zend_Auth_Adapter_Facebook implements Zend_Auth_Adapter_Interface
     private $_secret;
     private $_permissions;
     private $_token;
+    private $_redirect_uri;
     private $_url           = 'https://graph.facebook.com/oauth/access_token';
 
     /**
@@ -64,6 +65,13 @@ class Zend_Auth_Adapter_Facebook implements Zend_Auth_Adapter_Interface
             unset($config['secret']);
         } else {
             throw new Zend_Auth_Exception('Required param "secret" is missing param in config');
+        }
+        
+        if (isset($config['redirect_uri'])) {
+            $this->_redirect_uri = $config['redirect_uri'];
+            unset($config['redirect_uri']);
+        } else {
+            $this->_redirect_uri = null;
         }
 
         if (isset($config['permissions'])) {
@@ -100,7 +108,7 @@ class Zend_Auth_Adapter_Facebook implements Zend_Auth_Adapter_Interface
             'client_id'     => $this->_appId,
             'client_secret' => $this->_secret,
             'type'          => 'client_cred',
-            'redirect_uri'  => $this->getCurrentUrl(),
+            'redirect_uri'  => $this->getRedirectUri(),
             'code'          => $this->_token,
         );
 
@@ -147,7 +155,7 @@ class Zend_Auth_Adapter_Facebook implements Zend_Auth_Adapter_Interface
         $params = array(
             'scope'         => $this->_permissions,
             'client_id'     => $this->_appId,
-            'redirect_uri'  => $this->getCurrentUrl(),
+            'redirect_uri'  => $this->getRedirectUri(),
         );
         $url = 'https://graph.facebook.com/oauth/authorize?';
         $url .= http_build_query($params, null, '&');
@@ -192,5 +200,26 @@ class Zend_Auth_Adapter_Facebook implements Zend_Auth_Adapter_Interface
         // rebuild
         return $protocol . $parts['host'] . $port . $parts['path'] . $query;
     }
+    
+    /**
+    *Checks to see if _redirect_uri is set, if not return current URL
+    */
+    protected function getRedirectUri()
+    {
+    	if($this->_redirect_uri != null)
+    		return $this->_redirect_uri;
+    	else
+    		return $this->getCurrentUrl();
+    }
+    
+    /**
+    *Public function to allow users to set _redirect_uri after constructing the adapter
+    */
+    public function setRedirectUri($redirect_uri)
+    {
+    	$this->_redirect_uri = $redirect_uri;
+    	return $this;
+    }
+    	
 
 }
