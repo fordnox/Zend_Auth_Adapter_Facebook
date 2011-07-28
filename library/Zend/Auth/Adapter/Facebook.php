@@ -107,7 +107,6 @@ class Zend_Auth_Adapter_Facebook implements Zend_Auth_Adapter_Interface
         $args = array(
             'client_id'     => $this->_appId,
             'client_secret' => $this->_secret,
-            'type'          => 'client_cred',
             'redirect_uri'  => $this->getRedirectUri(),
             'code'          => $this->_token,
         );
