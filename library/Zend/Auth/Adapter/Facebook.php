@@ -158,7 +158,7 @@ class Zend_Auth_Adapter_Facebook implements Zend_Auth_Adapter_Interface
         );
         $url = 'https://graph.facebook.com/oauth/authorize?';
         $url .= http_build_query($params, null, '&');
-        header('Location: '.$url);
+        echo("<script> top.location.href='" . $url . "'</script>");
         exit();
     }
 
