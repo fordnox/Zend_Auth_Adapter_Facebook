@@ -42,6 +42,7 @@ class Zend_Auth_Adapter_Facebook implements Zend_Auth_Adapter_Interface
     protected static $DROP_QUERY_PARAMS = array(
         'session',
         'signed_request',
+        'code'
     );
 
     /**
