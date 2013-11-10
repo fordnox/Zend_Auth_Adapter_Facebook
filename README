@@ -49,7 +49,7 @@ class AuthController extends Zend_Controller_Action
             $adapter->setToken($token);
             $result  = $auth->authenticate($adapter);
             if ($result->isValid()) {
-                $access_token = $auth->getIdentity();
+                $access_token = $result->getIdentity();
                 // do your stuff with access token
             } else {
                 print $result->getMessages();
